@@ -1,6 +1,9 @@
 from GameWidget import Ui_GameWidget
 from PyQt6.QtWidgets import QWidget
 import random
+import sqlite3
+import datetime
+import time
 
 
 class GameWindow(QWidget, Ui_GameWidget):
@@ -13,9 +16,14 @@ class GameWindow(QWidget, Ui_GameWidget):
         self.file_name = file_name
         self.newButton.clicked.connect(self.click)
         self.oldButton.clicked.connect(self.click)
+
+        self.connection = sqlite3.connect('GamesHistory.sqlite')
+        self.cur = self.connection.cursor()
+
         self.game()
 
     def game(self) -> None:
+        self.start_time = time.time()
         with open(self.file_name, encoding='utf-8', mode='rt') as f:
             self.all_words = list({i.strip() for i in f.readlines()})
         self.score = 0
@@ -52,11 +60,12 @@ class GameWindow(QWidget, Ui_GameWidget):
         self.scoreCounter.display(self.score)
 
         if self.hitpoints == 0:
-            self.end_game()
+            self.delta_time = time.time() - self.start_time
+            self.date = '.'.join(datetime.date.today().__str__().split('-')[::-1])
+            self.id = len(list(self.cur.execute('''SELECT id FROM games'''))) + 1
+            self.add_game_results(self.id, self.delta_time, self.score, self.date)
+            self.close()
 
-    def end_game(self) -> int:
-        self.hide()
-        return self.score
-
-    def results(self) -> int:
-        return self.score
+    def add_game_results(self, id, time, score, date) -> None:
+        self.cur.execute('''INSERT INTO Games VALUES (?, ?, ?, ?)''',
+                         (id, time, score, date))
