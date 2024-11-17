@@ -1,5 +1,6 @@
 import sys
 import datetime
+import time
 import sqlite3
 from FirstWindow import Ui_MainWindow
 
@@ -32,16 +33,18 @@ class StartWidget(QMainWindow, Ui_MainWindow):
         self.cur.execute('''DELETE FROM Games''')
 
     def start_test(self) -> None:
-        start_time = datetime.time()
-        game = GameWindow('../ProjectYndx1/a_bunch_of_words.txt')
-        self.score = game
-        self.delta_time = datetime.time() - start_time
+        start_time = time.time()
+        game = GameWindow('a_bunch_of_words.txt')
+        self.score = game.results()
+        self.delta_time = time.time() - start_time
         self.date = '.'.join(datetime.date.today().__str__().split('-')[::-1])
-        self.add_game_results(self.delta_time, self.score, self.date)
+        self.id = len(list(self.cur.execute('''SELECT id FROM games'''))) + 1
+        self.add_game_results(self.id, self.delta_time, self.score, self.date)
+        print(self.delta_time, self.score, self.date)
 
-    def add_game_results(self, time, score, date) -> None:
-        self.cur.execute('''INSERT INTO Games VALUES (?, ?, ?)''',
-                         (time, score, date))
+    def add_game_results(self, id, time, score, date) -> None:
+        self.cur.execute('''INSERT INTO Games VALUES (?, ?, ?, ?)''',
+                         (id, time, score, date))
 
 
 def except_hook(cls, exception, traceback):

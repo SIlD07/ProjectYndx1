@@ -6,13 +6,14 @@ import random
 class GameWindow(QWidget, Ui_GameWidget):
     def __init__(self, file_name):
         super().__init__()
+        self.setupUi(self)
         self.hitpoints = 3
         self.lifeCounter.display(self.hitpoints)
         self.word_checker = set()
         self.file_name = file_name
-        self.game()
         self.newButton.clicked.connect(self.click)
         self.oldButton.clicked.connect(self.click)
+        self.game()
 
     def game(self) -> None:
         with open(self.file_name, encoding='utf-8', mode='rt') as f:
@@ -33,11 +34,18 @@ class GameWindow(QWidget, Ui_GameWidget):
                 self.hitpoints -= 1
                 self.word_checker.add(self.wordShowingLabel.text())
 
-        while True:
-            word = random.choice(self.all_words)
-            if word not in self.word_checker:
-                break
-        self.wordShowingLabel.setText(word)
+        if random.choice((0, 1)):
+            while True:
+                word = random.choice(self.all_words)
+                if word not in self.word_checker:
+                    break
+            self.wordShowingLabel.setText(word)
+        else:
+            while True:
+                word = random.choice(list(self.word_checker))
+                if word != self.wordShowingLabel.text():
+                    break
+            self.wordShowingLabel.setText(word)
 
         self.lifeCounter.display(self.hitpoints)
         self.score += 1
@@ -50,5 +58,5 @@ class GameWindow(QWidget, Ui_GameWidget):
         self.hide()
         return self.score
 
-    # def results(self) -> int:
-    #     return self.score
+    def results(self) -> int:
+        return self.score
