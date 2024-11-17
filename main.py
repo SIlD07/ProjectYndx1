@@ -21,7 +21,6 @@ class StartWidget(QMainWindow, Ui_MainWindow):
 
         self.connection = sqlite3.connect('GamesHistory.sqlite')
         self.cur = self.connection.cursor()
-
         self.setFixedSize(1100, 680)
 
     def open_history_db(self) -> None:
@@ -30,6 +29,7 @@ class StartWidget(QMainWindow, Ui_MainWindow):
 
     def clear_history_db(self) -> None:
         self.cur.execute('''DELETE FROM Games''')
+        self.connection.commit()
 
     def start_test(self) -> None:
         self.game = GameWindow('a_bunch_of_words.txt')
