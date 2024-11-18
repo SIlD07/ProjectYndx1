@@ -71,5 +71,5 @@ class GameWindow(QWidget, Ui_GameWidget):
 
     def add_game_results(self, id, time, score, date) -> None:
         self.cur.execute('''INSERT INTO Games VALUES (?, ?, ?, ?)''',
-                         (id, time, score, date))
+                         (id, int(time), score, date))
         self.connection.commit()
