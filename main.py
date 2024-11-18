@@ -3,7 +3,7 @@ import sys
 import sqlite3
 from FirstWindow import Ui_MainWindow
 
-from PyQt6 import QtCore
+from PyQt6 import QtCore, QtGui
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
 from GameWindow import GameWindow
@@ -14,7 +14,7 @@ class StartWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+        self.setWindowIcon(QtGui.QIcon('snowman.PNG'))
         self.startButton.clicked.connect(self.start_test)
         self.historyButton.clicked.connect(self.open_history_db)
         self.clearButton.clicked.connect(self.clear_history_db)
