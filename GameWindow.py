@@ -30,6 +30,7 @@ class GameWindow(QWidget, Ui_GameWidget):
         word = random.choice(self.all_words)
         self.wordShowingLabel.setText(word)
         self.show()
+        self.first_word_flag = True
 
     def click(self):
         if self.sender().text() == 'Новое':
@@ -42,7 +43,8 @@ class GameWindow(QWidget, Ui_GameWidget):
                 self.hitpoints -= 1
                 self.word_checker.add(self.wordShowingLabel.text())
 
-        if random.choice((0, 1)):
+        if random.choice((0, 1)) or self.first_word_flag:
+            self.first_word_flag = False
             while True:
                 word = random.choice(self.all_words)
                 if word not in self.word_checker:
@@ -53,6 +55,7 @@ class GameWindow(QWidget, Ui_GameWidget):
                 word = random.choice(list(self.word_checker))
                 if word != self.wordShowingLabel.text():
                     break
+                print("2")
             self.wordShowingLabel.setText(word)
 
         self.lifeCounter.display(self.hitpoints)
