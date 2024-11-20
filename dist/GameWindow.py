@@ -1,5 +1,5 @@
 from GameWidget import Ui_GameWidget
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QInputDialog
 import random
 import sqlite3
 import datetime
@@ -65,11 +65,15 @@ class GameWindow(QWidget, Ui_GameWidget):
         if self.hitpoints == 0:
             self.delta_time = time.time() - self.start_time
             self.date = '.'.join(datetime.date.today().__str__().split('-')[::-1])
-            self.id = len(list(self.cur.execute('''SELECT id FROM games'''))) + 1
-            self.add_game_results(self.id, self.delta_time, self.score, self.date)
+            self.add_game_results(self.delta_time, self.score, self.date)
             self.close()
 
-    def add_game_results(self, id, time, score, date) -> None:
+    def add_game_results(self, time, score, date) -> None:
+        name, ok_pressed = QInputDialog.getText(self, "Введите имя",
+                                                "Не более 10 символов")
+        if not ok_pressed:
+            name = 'Безымянный'
+        name = name[:10]
         self.cur.execute('''INSERT INTO Games VALUES (?, ?, ?, ?)''',
-                         (id, int(time), score, date))
+                         (name, int(time), score, date))
         self.connection.commit()

@@ -20,7 +20,7 @@ class Ui_GameWidget(object):
         self.oldButton.setGeometry(QtCore.QRect(310, 340, 111, 41))
         self.oldButton.setObjectName("oldButton")
         self.wordShowingLabel = QtWidgets.QLabel(parent=GameWidget)
-        self.wordShowingLabel.setGeometry(QtCore.QRect(310, 200, 351, 81))
+        self.wordShowingLabel.setGeometry(QtCore.QRect(445, 200, 300, 81))
         self.wordShowingLabel.setObjectName("wordShowingLabel")
         self.label = QtWidgets.QLabel(parent=GameWidget)
         self.label.setGeometry(QtCore.QRect(400, 110, 71, 41))
