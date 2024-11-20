@@ -9,7 +9,7 @@ class HistoryWindow(QWidget, Ui_Form):
         self.setupUi(self)
         self.historyTable.setColumnCount(4)
         for i in range(4):
-            self.historyTable.setColumnWidth(i, self.historyTable.width() // 4 - 2)
+            self.historyTable.setColumnWidth(i, self.historyTable.width() // 4 - 3)
         self.historyTable.setHorizontalHeaderLabels(('ID', 'Time', 'Score', 'Date'))
         self.connection = sqlite3.connect('GamesHistory.sqlite')
         cur = self.connection.cursor()
